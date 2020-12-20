@@ -1,24 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import SearchMovie from "./Components/SearchMovie";
+import Movies from "./Components/Movies";
+import { useState, useEffect } from "react";
+import axios from "axios";
+
+const URL = `http://www.omdbapi.com/?apikey=a671825fc&`;
 
 function App() {
+  const [movies, setMovies] = useState([]);
+
+  const callApi = async (name) => {
+    let res = await axios.get(`${URL}s=${name}`);
+    console.log(res);
+    if (res.status === 200) {
+      setMovies(res.data.Search);
+    }
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <SearchMovie onClick={callApi}></SearchMovie>
+      <Movies movies={movies}></Movies>
+    </>
   );
 }
 
